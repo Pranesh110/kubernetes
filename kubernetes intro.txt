@@ -1,0 +1,21 @@
+Kube is a orchestrator of containers
+
+Why we need kube to manage containers?
+
+Containers are ephemeral in nature: the conatiner or short life(die and revive anytime)
+
+Problem1:(single host problem)
+
+Let say one host machine launching 50 conatiner and say one of the conatiner consumes lot of host resources
+
+other one of the container is will not get enough resource bacoz of that or down.
+
+Problem2:(auto healing)
+Say if  anyone killed the container app wont be accessible
+
+so some need to up the container.
+
+AUTO HEALING: with out manual work it should come up 
+
+Problem 3(Auto scaling):
+
