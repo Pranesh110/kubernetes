@@ -1,0 +1,58 @@
+#Deployment yaml is a yaml file which is used to create a deployment in kubernetes cluster. It contains the details of the deployment like name, image, port etc.
+#kinda specification of docker container which we want to run in the deployment. It can be nginx, apache, mysql etc.
+
+#End of the day we are deploying POD only
+
+#--deployemnt--replica--pod--container--image--port
+
+#For load balancing we can use service.yaml file. It will create a service which will load balance the traffic to all the pods.
+
+#Replicate set is a controller which will create the pods and manage them. If any pod goes down it will create a new pod to replace it.
+#replica set is doing auto healing.
+
+#These and all controlled by CONTROLLER MANAGER which is in control plane. It will create the pods and manage them. If any pod goes down it will create a new pod to replace it.
+
+#It will check for desired state and actual state of the pods. If they are not same it will take action to make them same.
+
+
+#apiversion is the version of the api which we are using. It can be v1, v1beta1, v1alpha1 etc. It is used to specify the version of the api which we are using.
+#kind we specify it is pod or deployment service
+#metadata we specify the name of the deployment
+#spec we specify the container details like container name image port and number of replicas we want to create.
+#replicas we specify the number of pods we want to create. It can be 1, 2, 3 etc. It is used to specify the number of pods we want to create.
+#selector we specify the label of the pods which we want to create. It is used to specify the label of the pods which we want to create.
+#template we specify the template of the pods which we want to create. It is used to specify the template of the pods which we want to create.
+#inside template we specify the metadata and spec of the pods which we want to create. It is used to specify the metadata and spec of the pods which we want to create.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3 
+
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+
+
+#kubect create -f deployment.yaml (file name)  #it will create a deployment if it is not present and if it is present it will update the deployment.
+
+#kubectl het deployments
+#it will show the deployment and the number of replicas and the number of pods running.
+
+#kubectl get pods
+#it will show the pods running and the number of pods running.
+
+#kubectl get rs
+#it will show the replica set and the number of replicas and the number of pods running.

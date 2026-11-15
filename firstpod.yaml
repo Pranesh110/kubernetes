@@ -1,0 +1,35 @@
+#pod.yaml is a yaml file which is used to create a pod in kubernetes cluster. It contains the details of the pod like name, image, port etc.
+#kinda specification of docker container which we want to run in the pod. It can be nginx, apache, mysql etc.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+
+#KIND we specify it is pod or deployment service
+#autoscaling lb are not supported in pod so we use deployment for that in yaml file
+#Spec we specify the container details like container name image port 
+
+
+#CREATE A POD:
+#Kubectl create -f pod.yaml(file name)
+#kubectl apply -f pod.yaml (file name)  #it will create a pod if it is not present and if it is present it will update the pod.
+#diff between create and apply is that create will create a pod if it is not present and if it is present it will give an error. Apply will create a pod if it is not present and if it is present it will update the pod.
+
+# To see running pods
+#Kubectl get pods
+#kubectl get pods -o wide which will give you more details about the pod
+
+#to delete a pod
+#kubectl delete pod <pod_name>
+
+#to debug a pod logging
+#kubectl logs <pod_name>  
+
+#To get entire info of the pod
+#kubectl describe pod <pod_name>  
