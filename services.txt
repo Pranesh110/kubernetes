@@ -60,6 +60,8 @@ Different Service types are used depending on access level:
    - This allows users outside the cluster to access the application.
    - This is managed by Cloud controll manager
 
+ExternalName – Map a Kubernetes Service name to an external DNS name.
+
 For a normal kubeadm cluster, external access is usually handled using Ingress or an API Gateway.
 
 In short, a Kubernetes Service provides a stable endpoint, enables service discovery, and balances traffic to pods even when pod IPs change dynamically.
