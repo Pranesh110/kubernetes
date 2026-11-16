@@ -1,0 +1,65 @@
+SERVICES:
+Pod → Deployment → Service
+
+Why do we need a Service?
+
+Suppose we deploy a Deployment with 3 replicas of a pod. Without a Service, each pod gets its own IP address. If one pod fails and a new pod is created to replace it, the new pod gets a different IP.
+
+Example:
+- Pod 1: 10.0.0.8
+- Pod 2: 10.0.0.9
+
+If one pod goes down and a replacement pod is created, it may get a new IP:
+- Pod 1: 10.0.0.10
+- Pod 2: 10.0.0.9
+
+Now, if someone was using the old IP 10.0.0.8, they will not be able to reach the application anymore.
+
+This is where a Service helps.
+
+Load Balancer Service:
+With a Service YAML, we create a Service that has a stable IP address. Users connect to this Service IP, and the Service forwards traffic to the backend pods. Even if pods are destroyed and replaced with new ones, the Service keeps working.
+
+This is managed by kube-proxy.
+
+Service → Deployment → ReplicaSet → Pods
+
+We provide a URL or IP that points to the Service, not directly to the pod.
+
+But if pod IPs keep changing, how does the Service know where to send traffic?
+
+This is solved by Service Discovery using labels and selectors.
+
+A Service does not look for pod IP addresses directly. Instead, it identifies the pods through labels and selectors.
+
+Example:
+- Payment Service selects pods with label app=payment
+- Gateway Service selects pods with label app=gateway
+
+The Service forwards traffic to all matching pods, regardless of their changing IP addresses.
+
+How users reach the Service:
+
+Different Service types are used depending on access level:
+
+1. ClusterIP
+   - This is the default type.
+   - It provides load balancing and service discovery inside the Kubernetes cluster.
+   - It is used by applications that are accessed from within the cluster.
+   - A user must be inside the cluster or have cluster access.
+
+2. NodePort
+   - This exposes the service on a specific port of the worker node IP.
+   - The application can be reached through the worker node IP and the NodePort.
+   - It is useful for access from outside the cluster, but not as advanced as a cloud load balancer.
+
+3. LoadBalancer
+   - This is used to expose the service to the external world.
+   - In cloud-managed Kubernetes such as EKS or AKS, Kubernetes creates a cloud load balancer like an ALB or NLB.
+   - This load balancer has a public IP and forwards traffic to the Service and then to the pods.
+   - This allows users outside the cluster to access the application.
+   - This is managed by Cloud controll manager
+
+For a normal kubeadm cluster, external access is usually handled using Ingress or an API Gateway.
+
+In short, a Kubernetes Service provides a stable endpoint, enables service discovery, and balances traffic to pods even when pod IPs change dynamically.
