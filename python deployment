@@ -1,0 +1,37 @@
+first have the application and docker file and build images
+in mini kube this image wont be there when we run the deployment it pull image from minikube docker engine so it will search there
+so do minikube image load <image_name> to load the image in minikube docker engine
+
+
+Create deployemnt.yaml:
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-deployment
+  labels: 
+    app: dev
+spec:
+  replicas: 2 
+
+  selector:
+    matchLabels:
+      app: dev
+  template:
+    metadata:
+      labels:
+        app: dev
+    spec:
+      containers:
+      - name: python-kube
+        image: test:v1
+        ports:
+        - containerPort: 8000
+
+run the command to create deployment:
+kubectl create -f deployment.yaml
+
+to see the pod details:
+kubectl get pods
+kubectl get pods -o wide 
+kubectl get pods -v=7 or -v=9 to see the details of the pod how it is created and what is the process of creating the pod.

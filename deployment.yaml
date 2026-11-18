@@ -56,3 +56,7 @@ spec:
 
 #kubectl get rs
 #it will show the replica set and the number of replicas and the number of pods running.
+
+#kubectl delete deployment <deployment_name>
+#it will delete the deployment and all the pods created by the deployment.
+
