@@ -19,3 +19,79 @@ AUTO HEALING: with out manual work it should come up
 
 Problem 3(Auto scaling):
 
+
+Control Plane (Control Node) Components
+------------------------------------------------
+The control plane is the management layer of a Kubernetes cluster. It makes cluster
+decisions, maintains the desired state, schedules workloads, and exposes the Kubernetes API.
+
+1. kube-apiserver
+   - Use: Acts as the front end for the Kubernetes control plane and validates or processes
+     REST API requests.
+   - Use case: Receives kubectl commands and requests from controllers, and stores or reads
+     cluster state through the API.
+
+2. etcd
+   - Use: Stores the cluster configuration and all Kubernetes cluster state as a distributed
+     key-value database.
+   - Use case: Keeps information about Pods, Deployments, Services, Secrets, ConfigMaps, and
+     other Kubernetes objects.
+
+3. kube-scheduler
+   - Use: Selects a suitable worker node for newly created Pods.
+   - Use case: Places workloads based on CPU and memory requests, node capacity, affinity,
+     anti-affinity, taints, tolerations, and availability.
+
+4. kube-controller-manager
+   - Use: Runs controller processes that continuously compare the current state with the
+     desired state.
+   - Use case: Restarts failed containers, creates replacement Pods, maintains the expected
+     number of replicas, and manages node, endpoint, and resource lifecycle tasks.
+
+5. cloud-controller-manager
+   - Use: Connects Kubernetes with an infrastructure provider.
+   - Use case: Creates cloud load balancers, manages cloud routes, and associates cloud
+     instances with Kubernetes nodes. This component is used mainly in managed or cloud
+     Kubernetes clusters.
+
+
+Worker Node Components
+----------------------
+Worker nodes run application workloads. Each worker node provides compute, networking,
+and storage resources to the Pods assigned to it.
+
+1. kubelet
+   - Use: Runs on every worker node and communicates with the kube-apiserver.
+   - Use case: Ensures containers described in Pod specifications are running and healthy,
+     and reports node and Pod status back to the control plane.
+
+2. kube-proxy
+   - Use: Implements network rules that allow Pods and Services to communicate.
+   - Use case: Routes Service traffic to the available backend Pods and enables load
+     balancing within the cluster.
+
+3. Container runtime
+   - Use: Downloads container images and runs containers.
+   - Use case: Uses runtimes such as containerd or CRI-O to start, stop, and manage the
+     containers inside Pods.
+
+4. Pods
+   - Use: The smallest deployable unit in Kubernetes; a Pod normally contains one or more
+     containers that share networking and storage.
+   - Use case: Runs application containers, sidecar containers, initialization containers,
+     databases, web servers, batch jobs, and other workloads.
+
+
+Use cases of Kubernetes
+-----------------------
+- Auto healing: Restarts or replaces unhealthy Pods and containers automatically.
+- Auto scaling: Adds or removes Pods based on workload demand using the Horizontal Pod
+  Autoscaler or adjusts resources using the Vertical Pod Autoscaler.
+- Load balancing: Distributes traffic across multiple healthy Pods.
+- Rolling updates and rollbacks: Deploys application changes gradually and restores a
+  previous version if an update fails.
+- Resource management: Limits and schedules CPU and memory for application workloads.
+- Portability: Runs containers consistently across local, on-premises, and cloud environments.
+- Microservices management: Deploys, discovers, connects, secures, and scales independent
+  application services.
+

@@ -48,7 +48,7 @@ spec:
 
 #kubect create -f deployment.yaml (file name)  #it will create a deployment if it is not present and if it is present it will update the deployment.
 
-#kubectl het deployments
+#kubectl get deployments
 #it will show the deployment and the number of replicas and the number of pods running.
 
 #kubectl get pods
