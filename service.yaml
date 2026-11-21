@@ -1,0 +1,120 @@
+#With service it will do loadbalancing service discovery and external expose
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app.kubernetes.io/name: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+#port listening on 80 and target port is 9376 which is the port of the pod where the application is running. It will forward the traffic to the pod on port 9376.
+#external will listen on port 80 and forward the traffic to the pod on port 9376. It will create a load balancer which will distribute the traffic to all the pods running the application.
+#selector is used to select the pods which are running the application. It will select the pods which have the label app.kubernetes.io/name: MyApp. It will forward the traffic to all the pods which have this label.
+
+
+#In deployment.yaml we have selector with label app: dev these selector is used in the service.yaml
+Selector the label app: dev that send the req  as proto tcp and port 8000 and listen on 80
+Port and target port
+
+We can reference the Name of the Pod port as ref in service target port
+•	ports:
+•	  - name: name-of-service-port
+•	    protocol: TCP
+•	    port: 80
+•	    targetPort: http-web-svc (useing the port name here as to send )
+•	
+•	---
+•	apiVersion: v1
+•	kind: Pod
+•	metadata:
+•	  name: nginx
+•	  labels:
+•	    app.kubernetes.io/name: proxy
+•	spec:
+•	  containers:
+•	  - name: nginx
+•	    image: nginx:stable
+•	    ports:
+•	      - containerPort: 80
+•	        name: http-web-svc (port name we defined)
+
+
+#Node port service is used to expose the service to the external world. It will create a node port which will listen on a port and forward the traffic to the service. It will create a load balancer which will distribute the traffic to all the pods running the application.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+      nodePort: 30080
+#Here we have specified the node port as 30080 which will listen on this port and forward the traffic to the service on port 80 and then to the pod on port 9376. It will create a load balancer which will distribute the traffic to all the pods running the application.
+#external will listen on port 30080 and forward the traffic to the service on port 80 and then to the pod on port 9376. It will create a load balancer which will distribute the traffic to all the pods running the application.
+
+External client
+
+Browser / API client
+
+
+Worker Node IP : 30080
+
+NodePort
+
+
+my-service : 80
+
+ClusterIP Service
+
+
+Matching Pod : 9376
+#now svc type load balancer is used to expose the service to the external world. It will create a load balancer which will listen on a port and forward the traffic to the service. It will create a load balancer which will distribute the traffic to all the pods running the application.
+apiVersion: v1
+kind: Service 
+metadata:
+  name: my-service
+spec:
+  type: LoadBalancer  
+  selector:
+    app.kubernetes.io/name: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+
+Now when we give kubectl get svc my-service it will show the external ip of the load balancer which we can use to access the application from the external world. It will create a load balancer which will distribute the traffic to all the pods running the application.
+#but load balance is meant to be supported in cloud environment like aws, gcp, azure etc. It will create a load balancer which will distribute the traffic to all the pods running the application. But in minikube it will not work because minikube is running on local machine and it does not have any load balancer. So we can use node port service to expose the service to the external world. It will create a node port which will listen on a port and forward the traffic to the service. It will create a load balancer which will distribute the traffic to all the pods running the application.
+
+#cluster ip bascially uses the cluster ip not worker node ip and user can use the app using the cluster ip but they need to inside the cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service
+spec:
+  type: ClusterIP
+  selector:
+    app: dev
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+1	Understanding the configuration
+•	Field	•	Meaning
+•	type: ClusterIP	•	Internal cluster access only
+•	selector: app: dev	•	Selects your two Python Pods
+•	port: 80	•	Service listening port
+•	targetPort: 8000	•	Python application port inside the Pod
+•	nodePort	•	Not required
+
+
+If we use Node port a separate IP will be created and port that we mention will mapped
+If we use cluster type a same cluster ip will be used
+If we use loadbalancer A separate private and public ip will be created.

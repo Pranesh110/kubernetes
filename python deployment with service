@@ -3,7 +3,7 @@ in mini kube this image wont be there when we run the deployment it pull image f
 so do minikube image load <image_name> to load the image in minikube docker engine
 
 
-Create deployemnt.yaml:
+Create deployment.yaml:
 
 apiVersion: apps/v1
 kind: Deployment
@@ -35,3 +35,42 @@ to see the pod details:
 kubectl get pods
 kubectl get pods -o wide 
 kubectl get pods -v=7 or -v=9 to see the details of the pod how it is created and what is the process of creating the pod.
+
+
+Now create service.yaml to expose the deployment (node port service) to the external world:
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service
+spec:
+  type: NodePort
+  selector:
+    app: dev
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8000
+      nodePort: 30080
+#kubectl create -f service.yaml
+#kubectl get service
+#kubectl describe service python-service
+#kubectl get service python-service -o wide
+#kubectl delete service python-service
+
+#to use loadbalancer type:
+can edit the svc file using kubectl edit svc svcname
+or vim to svy ymal but do give apply after that
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: dev
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8000
+
+This will create a lb public ip in service but work on cloud environment
