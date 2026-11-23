@@ -118,3 +118,8 @@ spec:
 If we use Node port a separate IP will be created and port that we mention will mapped
 If we use cluster type a same cluster ip will be used
 If we use loadbalancer A separate private and public ip will be created.
+#kubectl create -f service.yaml
+#kubectl get service
+#kubectl describe service python-service
+#kubectl get service python-service -o wide
+#kubectl delete service python-service
