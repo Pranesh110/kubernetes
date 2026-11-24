@@ -1,0 +1,105 @@
+#Ingress is for to do the load balancing capabilities as like enterprise level
+#for advance routing and path based host based routing
+#Ingress will act as a single point of gateway btw external and services to pods
+
+# whta problem it solves: say before ingreess we have services for each service we would be needing a load balancer
+#that cost high
+
+#using ingress we ca have a single entrypoint to lb to many services 
+
+#How external will reach ingress it will be through any eternal lb on aws or lb server points this ingress service ip
+
+#We can have a external LB to point worker nodes and do path based or host based which will send traffic to services and there pods
+#but managing the rules and configuration would be difficult and wont be easy if any new service comes in
+
+#Using ingress we can manage easily just by changing th yaml file
+
+
+#To star with ingress we have define create a Ingress controller in the cluster this controller is responsible for Ingress rules we define
+
+#Controller can be nginx f5 othe enterprsie level
+
+#To configure the specify vendor lb can get confgi from there github repo 
+
+#So that inside the Ingress we can have capabilites of Nginx or F5 inside the K8's cluster itself.
+
+#Create a Ingress controller first :
+Get documentation and follow the step to setup the controller
+
+For minikube add nginx contorller by 
+minikube addons enable ingress
+
+
+
+
+#Ingress rules:
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+spec:
+  ingressClassName: nginx-example
+  rules:
+  - http:
+      paths:
+      - path: /testpath
+        pathType: Prefix
+        backend:
+          service:
+            name: test
+            port:
+              number: 80
+#this one is the path based routing where we specify the listing port, service name, path come /path it goes to this service
+#the one is act as nginx lb
+
+#For host based routing:
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-example
+spec:
+  rules:
+  - host: "foo.bar.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/bar"
+        backend:
+          service:
+            name: service1
+            port:
+              number: 80
+#now if any external hit the host name foo.bar.com with path /bar it goes to service 1 
+python-service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-example
+spec:
+  rules:
+  - host: "foo.bar.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/bar"
+        backend:
+          service:
+            name: python-service
+            port:
+              number: 80
+
+Service.yaml:
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service
+spec:
+  type: NodePort
+  selector:
+    app: dev
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+      nodePort: 30080
